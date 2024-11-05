@@ -54,7 +54,7 @@ This is a sentance of.
    spec:
      type: LoadBalancer
      ports:
-     - port: 80
+       - port: 80
      selector:
        app: nginx
    ---
@@ -75,20 +75,20 @@ This is a sentance of.
            app: nginx
        spec:
          containers:
-         - name: nginx
-           image: nginx:1.7.9
-           ports:
-           - containerPort: 80
+           - name: nginx
+             image: nginx:1.7.9
+             ports:
+               - containerPort: 80
    ```
 
 2. few other steps.
 <!-- vale off -->
-1. This is a sentance of.
+3. This is a sentance of.
    ```bash
    SSH should not typically be used within containers.
    Ensure that non-SSH services are not using port 22.
    ```
-<!-- vale on -->
+   <!-- vale on -->
 
 something else.
 
