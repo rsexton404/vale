@@ -2,6 +2,7 @@ package core
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -18,6 +19,8 @@ import (
 var commentControlRE = regexp.MustCompile(`^vale (.+\..+|[^.]+) = (YES|NO|on|off)$`)
 
 var commentStyleRE = regexp.MustCompile(`^vale styles? = (.*)$`)
+
+var commentControlMatchesRE = regexp.MustCompile(`^vale (.+\..+)(\[.+\]) = (YES|NO)$`)
 
 // A File represents a linted text file.
 type File struct {
@@ -316,6 +319,16 @@ func (f *File) UpdateComments(comment string) {
 		f.Comments["off"] = true
 	} else if comment == "vale on" {
 		f.Comments["off"] = false
+	} else if commentControlMatchesRE.MatchString(comment) {
+		check := commentControlMatchesRE.FindStringSubmatch(comment)
+		if len(check) == 4 {
+			var parts []string
+			if err := json.Unmarshal([]byte(check[2]), &parts); err == nil {
+				for i := range parts {
+					f.Comments[check[1]+"["+parts[i]+"]"] = check[3] == "NO"
+				}
+			}
+		}
 	} else if commentControlRE.MatchString(comment) {
 		check := commentControlRE.FindStringSubmatch(comment)
 		if len(check) == 3 {
