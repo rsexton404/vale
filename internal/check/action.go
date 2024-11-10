@@ -123,7 +123,7 @@ func spelling(alert core.Alert, cfg *core.Config) ([]string, error) {
 		return suggestions, err
 	}
 
-	if !strings.Contains(alert.Check, "Vale.") {
+	if _, ok := mgr.Rules()[alert.Check]; !ok {
 		err = mgr.AddRuleFromFile(alert.Check, path)
 		if err != nil {
 			return suggestions, err
