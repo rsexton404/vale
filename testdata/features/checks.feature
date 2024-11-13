@@ -54,6 +54,7 @@ Feature: Checks
             test.md:27:1:Vale.Repetition:'Mermaid' is repeated!
             test.md:29:17:Vale.Repetition:'one' is repeated!
             test.md:31:6:Vale.Repetition:'to' is repeated!
+            test.md:35:1:Vale.Repetition:'use' is repeated!
             text.rst:6:17:Vale.Repetition:'as' is repeated!
             text.rst:8:33:Vale.Repetition:'the' is repeated!
             text.rst:15:7:Vale.Repetition:'and' is repeated!
