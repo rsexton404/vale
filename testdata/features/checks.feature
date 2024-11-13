@@ -47,10 +47,18 @@ Feature: Checks
         When I test "checks/Repetition"
         Then the output should contain exactly:
             """
-            test.tex:31:21:Vale.Repetition:'not' is repeated!
+            test.md:5:170:Vale.Repetition:'plan' is repeated!
+            test.md:21:27:Vale.Repetition:'a' is repeated!
+            test.md:23:56:Vale.Repetition:'completes' is repeated!
+            test.md:25:130:Vale.Repetition:'registry' is repeated!
+            test.md:27:1:Vale.Repetition:'Mermaid' is repeated!
+            test.md:29:17:Vale.Repetition:'one' is repeated!
+            test.md:31:6:Vale.Repetition:'to' is repeated!
             text.rst:6:17:Vale.Repetition:'as' is repeated!
+            text.rst:8:33:Vale.Repetition:'the' is repeated!
             text.rst:15:7:Vale.Repetition:'and' is repeated!
             text.rst:16:22:Vale.Repetition:'on' is repeated!
+            text.rst:19:1:Vale.Repetition:'this' is repeated!
             text.rst:20:13:Vale.Repetition:'be' is repeated!
             """
 

@@ -95,18 +95,26 @@ func (o Repetition) Run(blk nlp.Block, _ *core.File, cfg *core.Config) ([]core.A
 				return alerts, err
 			}
 
-			if !strings.Contains(converted, "\n") && !isMatch(o.exceptRe, converted) {
-				floc := []int{ploc[0], loc[1]}
+			if sents := nlp.SentenceTokenizer.Segment(converted); len(sents) == 1 {
+				// If we have more than one sentence, we're likely looking at
+				// a false positive:
+				//
+				// I almost forgot about that. That is important.
+				//
+				// All plans except a Personal plan can use Redis. Redis ...
+				if !isMatch(o.exceptRe, converted) {
+					floc := []int{ploc[0], loc[1]}
 
-				a, erra := makeAlert(o.Definition, floc, txt, cfg)
-				if erra != nil {
-					return alerts, erra
+					a, erra := makeAlert(o.Definition, floc, txt, cfg)
+					if erra != nil {
+						return alerts, erra
+					}
+
+					a.Message, a.Description = formatMessages(o.Message,
+						o.Description, curr)
+					alerts = append(alerts, a)
+					count = 0
 				}
-
-				a.Message, a.Description = formatMessages(o.Message,
-					o.Description, curr)
-				alerts = append(alerts, a)
-				count = 0
 			}
 		}
 		ploc = loc

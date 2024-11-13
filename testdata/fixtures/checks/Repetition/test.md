@@ -10,6 +10,24 @@ for user-defined types. The default meaning of the operators on standard types
 is given here. Bitwise `&`, `|` and `^` applied to boolean arguments are
 equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
 
-To create an OpenSearch cluster we’ll use the `Aiven command line interface <https://github.com/aiven/aiven-client>`_ . To install and set it up follow the instructions in `its GitHub page <https://github.com/aiven/aiven-client/>`_. However, if you prefer a visual interface, we also have a `web-based console <https://console.aiven.io/>`_ which you can use instead. Read the :doc:`getting started guide <../getting-started>` for more information.
+To create an OpenSearch cluster we’ll use the `Aiven command line interface <https://github.com/aiven/aiven-client>`_ . To install and set it up follow the instructions in `its GitHub page <https://github.com/aiven/aiven-client/>`_. However, if you prefer a visual interface, we also have a `web-based console <https://console.aiven.io/>`\_ which you can use instead. Read the :doc:`getting started guide <../getting-started>` for more information.
 
 Sometimes did did is okay.
+
+node, possibly after passing through intermediate Bitmap And and/or Bitmap Or
+
+| One         | Two     | Three                              |
+| ----------- | ------- | ---------------------------------- |
+| Alert event | `alert` | A a new, unique alert is recorded. |
+
+1. Follow the job under "View Logs" until the pipeline completes completes.
+2. If the pipeline fails, review the logs to identify the issue. If you are unable to resolve the issue, contact the Modus CLI team for assistance.
+3. Connect your Artifact Registry repository to your GitLab project by following the instructions in [Set up the Google Artifact Registry registry in a GitLab project](../../user/project/integrations/google_artifact_management.md).
+
+see the Mermaid [Mermaid user guide](https://mermaid.js.org/intro/getting-started.html)
+
+Here is another one one.
+
+Here to to help.
+
+I almost forgot about that. That is important.
