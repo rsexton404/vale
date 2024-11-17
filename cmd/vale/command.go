@@ -56,6 +56,7 @@ var Actions = map[string]func(args []string, flags *core.CLIFlags) error{
 	"fix":            fix,
 	"tag":            runTag,
 	"dc":             printConfig,
+	"load":           loadConfigs,
 }
 
 func fix(args []string, flags *core.CLIFlags) error {
@@ -333,4 +334,26 @@ func pathInfo(_ []string, flags *core.CLIFlags) error {
 
 	system["configs"] = append(system["configs"], cfg.ConfigFiles...)
 	return printJSON(system)
+}
+
+func loadConfigs(args []string, _ *core.CLIFlags) error {
+	if len(args) != 2 {
+		return core.NewE100("run", errors.New("two arguments expected"))
+	}
+
+	cfg, err := core.NewConfig(&core.CLIFlags{})
+	if err != nil {
+		return err
+	}
+	cfg.RootINI = args[0]
+
+	cfg.AddConfigFile(args[0])
+	cfg.AddConfigFile(args[1])
+
+	err = core.MockLoad(args[0], args[1], cfg)
+	if err != nil {
+		return err
+	}
+
+	return printJSON(cfg)
 }

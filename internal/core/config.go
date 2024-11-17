@@ -369,3 +369,18 @@ func pipeConfig(cfg *Config) ([]string, error) {
 
 	return sources, nil
 }
+
+// MockLoad returns the would-be configuration after loading two files, one
+// from the project and one from the user's local directory.
+func MockLoad(project, local string, cfg *Config) error {
+	uCfg, err := ini.LoadSources(ini.LoadOptions{
+		AllowShadows:             true,
+		SpaceBeforeInlineComment: true}, project, local)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = processConfig(uCfg, cfg, true)
+	return err
+}

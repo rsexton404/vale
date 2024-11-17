@@ -72,6 +72,7 @@ var hidden = []string{
 	"ls-path",
 	"host-install",
 	"host-uninstall",
+	"load",
 }
 
 // PrintIntro shows basic usage / getting started info.
