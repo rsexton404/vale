@@ -200,7 +200,13 @@ var coreOpts = map[string]func(*ini.Section, *Config) error{
 	},
 	"MinAlertLevel": func(sec *ini.Section, cfg *Config) error {
 		if !StringInSlice(cfg.Flags.AlertLevel, AlertLevels) {
-			level := sec.Key("MinAlertLevel").String() // .In("suggestion", AlertLevels)
+			level := sec.Key("MinAlertLevel").String()
+
+			values := sec.Key("MinAlertLevel").StringsWithShadows(",")
+			if len(values) > 0 {
+				level = values[len(values)-1]
+			}
+
 			if index, found := LevelToInt[level]; found {
 				cfg.MinAlertLevel = index
 			} else {
@@ -239,6 +245,12 @@ var coreOpts = map[string]func(*ini.Section, *Config) error{
 	},
 	"NLPEndpoint": func(sec *ini.Section, cfg *Config) error { //nolint:unparam
 		cfg.NLPEndpoint = sec.Key("NLPEndpoint").MustString("")
+
+		values := sec.Key("NLPEndpoint").StringsWithShadows(",")
+		if len(values) > 0 {
+			cfg.NLPEndpoint = values[len(values)-1]
+		}
+
 		return nil
 	},
 }
