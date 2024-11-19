@@ -26,7 +26,7 @@ func filter(mgr *Manager) (map[string]Rule, error) {
 
 	b, err := os.ReadFile(stringOrPath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read filter '%s': %v", stringOrPath, err)
+		return nil, fmt.Errorf("failed to read filter '%s': %w", stringOrPath, err)
 	}
 
 	filter := string(b)
