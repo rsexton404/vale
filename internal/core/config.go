@@ -38,12 +38,21 @@ var (
 	TmplDir   = filepath.Join(ConfigDir, "templates")
 	IgnoreDir = filepath.Join(ConfigDir, "ignore")
 	ActionDir = filepath.Join(ConfigDir, "actions")
+	FilterDir = filepath.Join(ConfigDir, "filters")
 	ScriptDir = filepath.Join(ConfigDir, "scripts")
 )
 
 // ConfigDirs is a list of all directories that contain user-defined, non-style
 // configuration files.
-var ConfigDirs = []string{VocabDir, DictDir, TmplDir, IgnoreDir, ActionDir, ScriptDir}
+var ConfigDirs = []string{
+	VocabDir,
+	DictDir,
+	TmplDir,
+	IgnoreDir,
+	ActionDir,
+	ScriptDir,
+	FilterDir,
+}
 
 // ConfigVars is a list of all supported environment variables.
 var ConfigVars = map[string]string{

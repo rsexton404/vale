@@ -11,18 +11,25 @@ import (
 )
 
 func filter(mgr *Manager) (map[string]Rule, error) {
-	filter := mgr.Config.Flags.Filter
+	stringOrPath := mgr.Config.Flags.Filter
 
-	if filter == "" {
+	if stringOrPath == "" {
 		return mgr.rules, nil
-	} else if core.FileExists(filter) {
-		b, err := os.ReadFile(filter)
-		if err != nil {
-			return nil, err
+	} else if !core.FileExists(stringOrPath) {
+		name := stringOrPath
+
+		stringOrPath = core.FindAsset(mgr.Config, name)
+		if stringOrPath == "" {
+			return nil, fmt.Errorf("filter '%s' not found", name)
 		}
-		filter = string(b)
 	}
 
+	b, err := os.ReadFile(stringOrPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read filter '%s': %v", stringOrPath, err)
+	}
+
+	filter := string(b)
 	// .Name, .Level -> override
 	// .Scope, .Message, .Description, .Extends, .Link
 	//

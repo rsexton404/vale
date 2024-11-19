@@ -28,7 +28,7 @@ end
 
 When(/^I use filter "(.*)"$/) do |f|
   step %(I cd to "../../fixtures/filters")
-  step %(I run `#{cmd} --filter="filter/#{f}.expr" .`)
+  step %(I run `#{cmd} --filter="#{f}.expr" .`)
 end
 
 When(/^I lint simple "(.*)"$/) do |flag|
