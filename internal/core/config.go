@@ -232,7 +232,7 @@ func NewConfig(flags *CLIFlags) (*Config, error) {
 	cfg.Formats = make(map[string]string)
 	cfg.Asciidoctor = make(map[string]string)
 	cfg.GChecks = make(map[string]bool)
-	cfg.MinAlertLevel = 1
+	cfg.MinAlertLevel = 0
 	cfg.RuleToLevel = make(map[string]string)
 	cfg.SBaseStyles = make(map[string][]string)
 	cfg.SChecks = make(map[string]map[string]bool)

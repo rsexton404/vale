@@ -86,6 +86,9 @@ Feature: Checks
         When I test "checks/Existence"
         Then the output should contain exactly:
             """
+            test.md:3:6:write-good.E-Prime:Avoid using "is"
+            test.md:7:4:write-good.E-Prime:Avoid using "Here's"
+            test.md:9:6:write-good.E-Prime:Avoid using "is"
             test.md:9:28:vale.Spacing:Use exactly one space between sentences and clauses. Check 'e.A' for spacing problems.
             """
 
