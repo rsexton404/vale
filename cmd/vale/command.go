@@ -243,7 +243,16 @@ func runRule(args []string, _ *core.CLIFlags) error {
 	return nil
 }
 
-func printVars(_ []string, _ *core.CLIFlags) error {
+func printVars(_ []string, flags *core.CLIFlags) error {
+	if flags.Output == "JSON" {
+		var out = map[string]string{}
+		for name := range core.ConfigVars {
+			value, _ := os.LookupEnv(name)
+			out[name] = value
+		}
+		return printJSON(out)
+	}
+
 	tableData := pterm.TableData{
 		{"Variable", "Description", "Value"},
 	}
@@ -259,7 +268,7 @@ func printVars(_ []string, _ *core.CLIFlags) error {
 	return pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
 }
 
-func printDirs(_ []string, _ *core.CLIFlags) error {
+func printDirs(_ []string, flags *core.CLIFlags) error {
 	styles, _ := core.DefaultStylesPath()
 
 	stylesFound := pterm.FgGreen.Sprint("✓")
@@ -281,6 +290,14 @@ func printDirs(_ []string, _ *core.CLIFlags) error {
 	nativeFound := pterm.FgGreen.Sprint("✓")
 	if !core.FileExists(native) {
 		nativeFound = pterm.FgRed.Sprint("✗")
+	}
+
+	if flags.Output == "JSON" {
+		return printJSON(map[string]string{
+			"StylesPath":  styles,
+			".vale.ini":   cfg,
+			"vale-native": nativeExe,
+		})
 	}
 
 	tableData := pterm.TableData{
