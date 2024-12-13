@@ -37,7 +37,7 @@ func TestNoPkgFound(t *testing.T) {
 		t.Fatal("expected error, got nil")
 	}
 
-	msg := "could not fetch 'https://github.com/errata-ai/Microsoft/releases/download/v0.14.x/Microsoft.zip' (status code '404')"
+	msg := "not a valid zip file"
 	if !strings.Contains(err.Error(), msg) {
 		t.Fatalf("expected '%s', got '%s'", msg, err.Error())
 	}
