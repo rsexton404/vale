@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mholt/archiver/v3"
+	"archive/zip"
 	cp "github.com/otiai10/copy"
 
 	"github.com/errata-ai/vale/v3/internal/core"
@@ -75,13 +75,49 @@ func loadLocalPkg(name, pkgPath, styles string, index int) error {
 	return installPkg(filepath.Dir(pkgPath), name, styles, index)
 }
 
+func extractZip(src, dest string) error {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	for _, file := range r.File {
+		destPath := filepath.Join(dest, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(destPath, os.ModePerm)
+			continue
+		}
+		os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
+
+		outFile, err := os.Create(destPath)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
+
+		rc, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer rc.Close()
+
+		_, err = io.Copy(outFile, rc)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func loadLocalZipPkg(name, pkgPath, styles string, index int) error {
 	dir, err := os.MkdirTemp("", name)
 	if err != nil {
 		return err
 	}
 
-	if err = archiver.Unarchive(pkgPath, dir); err != nil {
+	err = extractZip(pkgPath, dir)
+	if err != nil {
 		return err
 	}
 

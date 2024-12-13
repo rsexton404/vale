@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mholt/archiver/v3"
+	"archive/zip"
 	"github.com/spf13/pflag"
 
 	"github.com/errata-ai/vale/v3/internal/core"
@@ -55,33 +55,60 @@ func init() {
 	Actions["install"] = install
 }
 
-func fetch(src, dst string) error {
-	// Fetch the resource from the web:
-	resp, err := http.Get(src) //nolint:gosec,noctx
-
+func extractZip(src, dest string) error {
+	r, err := zip.OpenReader(src)
 	if err != nil {
 		return err
-	} else if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("could not fetch '%s' (status code '%d')", src, resp.StatusCode)
 	}
+	defer r.Close()
 
-	// Create a temp file to represent the archive locally:
+	for _, file := range r.File {
+		destPath := filepath.Join(dest, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(destPath, os.ModePerm)
+			continue
+		}
+		os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
+
+		outFile, err := os.Create(destPath)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
+
+		rc, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer rc.Close()
+
+		_, err = io.Copy(outFile, rc)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func fetch(src, dst string) error {
+	resp, err := http.Get(src)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
 	tmpfile, err := os.CreateTemp("", "temp.*.zip")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(tmpfile.Name()) // clean up
+	defer os.Remove(tmpfile.Name())
 
-	// Write to the  local archive:
 	_, err = io.Copy(tmpfile, resp.Body)
 	if err != nil {
 		return err
-	} else if err = tmpfile.Close(); err != nil {
-		return err
 	}
 
-	resp.Body.Close()
-	return archiver.Unarchive(tmpfile.Name(), dst)
+	return extractZip(tmpfile.Name(), dst)
 }
 
 func install(args []string, flags *core.CLIFlags) error {
